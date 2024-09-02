@@ -66,6 +66,8 @@ app.get("/api/me", (req, res, next) => {
   //   const payload = jwt.verify(auth, "shhhhh")
   //   const me = users.find((item) => (item.id = payload.id))
   //   if (me) {
+  console.log(req)
+
   return res.json({ ...users[0], password: undefined })
   //   } else {
   //     return res.status(500).json({ message: "Not found" })
@@ -105,5 +107,6 @@ app.get("/api/token", async function (req, res, next) {
 })
 
 server.listen(8000, "localhost", () => {
-  console.log(`Listening on ${process.env.NUXT_API_URL}`)
+  console.log(`Listening on ${8000}`)
+  // console.log(`Listening on ${process.env.NUXT_API_URL}`)
 })

@@ -1,11 +1,19 @@
 <script setup>
 definePageMeta({
-  middleware: "authentication"
+  middleware: "check-auth"
 })
+const route = useRoute()
 const { signOut } = useAuth()
-
 const signout = () => {
-  signOut({ external: true, redirect: useRuntimeConfig().public.API_URL + "?callbackUrl=" + useRuntimeConfig().public.APP_URL })
+  const urlOrigin = useRequestURL()
+  const url = urlOrigin.origin + decodeURIComponent(route.path || "/")
+
+  const data = JSON.stringify({ callbackUrl: url, sessionId: "123" })
+
+  const encData = btoa(data)
+  signOut()
+  navigateTo(useRuntimeConfig().public.API_URL + "logout?data=" + encData, { external: true })
+  // console.log(encData);
 }
 </script>
 

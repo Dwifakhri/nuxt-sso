@@ -5,14 +5,23 @@
 </template>
 
 <script setup>
+
 definePageMeta({
-  middleware: "authentication"
+  middleware: "check-auth"
 })
+const route = useRoute()
 const login = () => {
+  const urlOrigin = useRequestURL()
+  const url = urlOrigin.origin + decodeURIComponent(route.query.redirect || "/")
+
+  const data = JSON.stringify({ callbackUrl: url, sessionId: "123" })
+
+  const encData = btoa(data)
+  // console.log(encData);
+
   return navigateTo(useRuntimeConfig().public.API_URL +
     // "/login?callbackUrl=" +
-    "?callbackUrl=" +
-    useRuntimeConfig().public.APP_URL,
+    "?data=" + encData,
     // decodeURIComponent(to.fullPath),
     {
       external: true,
