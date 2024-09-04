@@ -3,44 +3,31 @@ export default defineNuxtRouteMiddleware((to) => {
   const { getSession, status } = useAuth()
   if (to.name !== "login" && status.value !== "authenticated") {
     const datax = to.query.dataCallback
-    console.log("ada")
-    console.log(to)
-
-    // console.log(to.query)
-
     if (datax) {
-      const decrypt: any = JSON.parse(atob(datax))
-      // console.log(datax, "datax")
-
-      // console.log("sds")
-      // console.log("sd")
-      // if (import.meta.server) {
-      //   console.log("server")
-      // }
-      if (import.meta.client) {
-        setToken(decrypt.jwtToken)
-        // const user = $fetch(
-        //   useRuntimeConfig().public.API_URL + "me?data=" + datax
-        //   // "http://localhost:8000/api/" + "me?data=" + datax
-        // )
-        // console.log(decrypt.callbackUrl, "callback")
-        const user = getSession()
-        // console.log(decrypt.callbackUrl, "callback")
-
-        user
-          .then((res) => {
-            // console.log("me auth", decrypt.callbackUrl)
-
-            navigateTo(to.path, { external: false })
-          })
-          .catch((error) => {
-            console.log("me error")
-            console.log(error)
-          })
-      }
+      $fetch(useRuntimeConfig().public.API_URL_BE + "decrypt", {
+        query: { str: datax },
+      })
+        .then((res: any) => {
+          const { jwtToken } = JSON.parse(res.decrypted)
+          if (import.meta.client) {
+            setToken(jwtToken)
+            const user = getSession()
+            user
+              .then((res) => {
+                navigateTo({
+                  params: to.params,
+                  query: { ...to.query, dataCallback: undefined },
+                })
+              })
+              .catch((error) => {
+                console.log(error)
+              })
+          }
+        })
+        .catch((err: any) => {
+          console.log(err)
+        })
     } else {
-      console.log("sd")
-      console.log(to.query)
       return navigateTo({
         path: "/login",
         query: { redirect: encodeURIComponent(to.fullPath) },

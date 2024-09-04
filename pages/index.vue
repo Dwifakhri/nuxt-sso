@@ -1,25 +1,52 @@
 <script setup>
 definePageMeta({
+  layout: "default",
   middleware: "check-auth"
 })
 const route = useRoute()
 const { signOut } = useAuth()
+// onMounted(() => {
+//   new bootstrap.Tooltip($('#coba')).toggle()
+// })
 const signout = () => {
   const urlOrigin = useRequestURL()
   const url = urlOrigin.origin + decodeURIComponent(route.path || "/")
-
   const data = JSON.stringify({ callbackUrl: url, sessionId: "123" })
-
-  const encData = btoa(data)
-  signOut()
-  navigateTo(useRuntimeConfig().public.API_URL + "logout?data=" + encData, { external: true })
-  // console.log(encData);
+  $fetch(useRuntimeConfig().public.API_URL_BE + "encrypt", { query: { str: data } })
+    .then((res) => {
+      signOut()
+      navigateTo(useRuntimeConfig().public.API_URL + "logout?data=" + res.encrypted, { external: true })
+    }).catch((err) => {
+      console.log(err);
+    })
 }
+const hide = () => {
+  // $('#coba').tooltip('toggle')
+  const a = new bootstrap.Tooltip($('#coba'))
+  a.show()
+  setTimeout(() => {
+    a.dispose()
+  }, 2000);
+  console.log(a);
+
+}
+
+// const showTooltip = () => {
+//   const a = new bootstrap.Tooltip($('#coba'))
+//   a.show()
+// }
+// const hideTooltip = () => {
+//   const a = new bootstrap.Tooltip($('#coba'))
+//   a.show()
+// }
 </script>
 
 <template>
   <div class="welcome">
     <h2>Welcome, admin!</h2>
+    <p id="coba" type="button" data-bs-toggle="tooltip" data-bs-title="to coba" data-bs-trigger="manual"
+      @mouseenter="showTooltip" @mouseleave="hideTooltip" @click="hide">Coba
+      page</p>
     <a href="#" @click="signout" class="logout-btn">Logout</a>
   </div>
 </template>

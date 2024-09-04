@@ -13,18 +13,16 @@ const route = useRoute()
 const login = () => {
   const urlOrigin = useRequestURL()
   const url = urlOrigin.origin + decodeURIComponent(route.query.redirect || "/")
+  console.log(url);
 
   const data = JSON.stringify({ callbackUrl: url, sessionId: "123" })
 
-  const encData = btoa(data)
-  // console.log(encData);
-
-  return navigateTo(useRuntimeConfig().public.API_URL +
-    // "/login?callbackUrl=" +
-    "?data=" + encData,
-    // decodeURIComponent(to.fullPath),
-    {
-      external: true,
+  $fetch(useRuntimeConfig().public.API_URL_BE + "encrypt", { query: { str: data } })
+    .then((res) => {
+      return navigateTo(useRuntimeConfig().public.API_URL +
+        "?data=" + res.encrypted, { external: true, })
+    }).catch((err) => {
+      return navigateTo("/login")
     })
 }
 </script>

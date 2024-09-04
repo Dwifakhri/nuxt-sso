@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       API_URL: process.env.NUXT_API_URL,
+      API_URL_BE: process.env.NUXT_API_URL_BE,
       APP_URL: process.env.NUXT_APP_URL,
     },
   },
@@ -28,7 +29,11 @@ export default defineNuxtConfig({
       ],
     },
   },
-  modules: ["@sidebase/nuxt-auth"],
+  modules: ["@sidebase/nuxt-auth", "@nuxt/image"],
+  image: {
+    domains: ["www.pexels.com"],
+    format: ["webp"],
+  },
   auth: {
     globalAppMiddleware: {
       isEnabled: false,
