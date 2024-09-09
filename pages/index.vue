@@ -5,9 +5,9 @@ definePageMeta({
 })
 const route = useRoute()
 const { signOut } = useAuth()
-// onMounted(() => {
-//   new bootstrap.Tooltip($('#coba')).toggle()
-// })
+onMounted(() => {
+
+})
 const signout = () => {
   const urlOrigin = useRequestURL()
   const url = urlOrigin.origin + decodeURIComponent(route.path || "/")
@@ -20,33 +20,24 @@ const signout = () => {
       console.log(err);
     })
 }
-const hide = () => {
+const toggle = () => {
   // $('#coba').tooltip('toggle')
-  const a = new bootstrap.Tooltip($('#coba'))
-  a.show()
-  setTimeout(() => {
-    a.dispose()
-  }, 2000);
-  console.log(a);
+  bootstrap.Tooltip.getInstance($('#coba')).hide();
+  // const a = new bootstrap.Tooltip($('#coba'))
+  // a.show()
+  // setTimeout(() => {
+  // a.hide()
+  // }, 2000);
+  // console.log(a);
 
 }
-
-// const showTooltip = () => {
-//   const a = new bootstrap.Tooltip($('#coba'))
-//   a.show()
-// }
-// const hideTooltip = () => {
-//   const a = new bootstrap.Tooltip($('#coba'))
-//   a.show()
-// }
 </script>
 
 <template>
   <div class="welcome">
     <h2>Welcome, admin!</h2>
-    <p id="coba" type="button" data-bs-toggle="tooltip" data-bs-title="to coba" data-bs-trigger="manual"
-      @mouseenter="showTooltip" @mouseleave="hideTooltip" @click="hide">Coba
-      page</p>
+    <nuxt-link to="/coba" id="coba" type="button" data-bs-toggle="tooltip" data-bs-title="to coba">Coba
+      page</nuxt-link>
     <a href="#" @click="signout" class="logout-btn">Logout</a>
   </div>
 </template>

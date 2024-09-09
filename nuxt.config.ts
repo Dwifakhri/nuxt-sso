@@ -2,6 +2,10 @@
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
+  // devServer: {
+  //   host: "0.0.0.0",
+  //   port: 3000,
+  // },
   runtimeConfig: {
     public: {
       API_URL: process.env.NUXT_API_URL,
@@ -51,7 +55,7 @@ export default defineNuxtConfig({
         // },
       },
       token: {
-        type: "",
+        // type: "",
         //     signInResponseTokenPointer: "/token",
         //     maxAgeInSeconds: 60 * 60 * 24 * 7,
         secureCookieAttribute: true,

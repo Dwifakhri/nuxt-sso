@@ -5,21 +5,14 @@ import {
   H3Event,
   getQuery,
 } from "h3"
-// import { useNuxtApp } from "nuxt/app"
 
-const TOKEN_TYPE = "Bearer"
+// const TOKEN_TYPE = "Bearer"
 
 const extractToken = (authHeaderValue: string) => {
-  const [, token] = authHeaderValue.split(`${TOKEN_TYPE} `)
-  // const [, token] = authHeaderValue.split(`${TOKEN_TYPE} ${TOKEN_TYPE} `)
-  // console.log(token)
-
-  return token
+  return authHeaderValue
 }
 
 const ensureAuth = async (event: H3Event) => {
-  // console.log(event)
-
   const authHeaderValue = getRequestHeader(event, "authorization")
   if (typeof authHeaderValue === "undefined") {
     throw createError({
@@ -36,21 +29,18 @@ const ensureAuth = async (event: H3Event) => {
   // console.log(useNuxtApp()._route)
 
   try {
-    // console.log("me")
-
-    // console.log(data)
-    // const encData = btoa(data)
-    // const user = await $fetch(`${useRuntimeConfig().public.API_URL}/me`, {
     const user = await $fetch(useRuntimeConfig().public.API_URL + "me", {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + extractedToken,
+        Authorization: extractedToken,
       },
     })
     // const user = await $fetch("http://localhost:8000/api/" + "me")
 
     return user
   } catch (error: any) {
+    console.log(error)
+
     throw createError({
       statusCode: error.response.status,
       statusMessage: error.response.statusText,

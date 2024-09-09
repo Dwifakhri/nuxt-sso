@@ -26,10 +26,14 @@ onMounted(() => {
 //   )
 
 // })
-// onBeforeUpdate(() => {
-//   console.log("destroy");
+onBeforeUpdate(() => {
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  Array.from(tooltipTriggerList).map((item) => {
 
-// })
+    bootstrap.Tooltip.getInstance(item).hide();
+
+  })
+})
 watch(() => route.name, (to, from) => {
   const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
   const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
